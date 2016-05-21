@@ -1,6 +1,6 @@
-# default-react
+# f2c
 
-### My boilerplate using
+### Fantasy Football App for [myfantasyleague.com]()
  - [Express JS](http://expressjs.com/) 4.x (eventually 5.x)
  - [React](https://facebook.github.io/react/) >= 15.1.0
  - [Redux](http://redux.js.org/)

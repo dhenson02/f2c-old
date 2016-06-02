@@ -3,3 +3,6 @@ node_modules
 npm-debug*.log
 data/*
 config.json
+graphql.*.json
+server/schema.graphql
+server/schema.json

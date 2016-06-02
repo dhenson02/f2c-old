@@ -1,44 +1,39 @@
 'use strict';
 const fs = require('fs');
 const path = require('path');
+const { Map, List } = require('immutable');
 
 class League {
     constructor () {
-        let filePath = path.join(__dirname, '..', '/data/league.json');
-        let file = fs.readFileSync(filePath, { encoding: "utf8" });
-        this.league = JSON.parse(file);
-
-        this.franchises = new Map();
-        this.standings = new Map();
-
-        this.setupStandings();
-        this.setupFranchises();
+        const filePath = path.join(__dirname, '..', '/data/league.json');
+        const file = fs.readFileSync(filePath, { encoding: "utf8" });
+        this.settings = Map(JSON.parse(file));
     }
 
-    setupStandings () {
-        let filePath = path.join(__dirname, '..', '/data/leagueStandings.json');
-        let file = fs.readFileSync(filePath, { encoding: "utf8" });
-        let standings = JSON.parse(file);
-        standings.franchise.forEach(stats => {
-            this.standings.set(stats.id, stats);
-        });
-    }
-
-    setupFranchises () {
-        let franchises = this.league.franchises.franchise;
-        franchises.forEach(franchise => {
-            let stats = this.standings.get(franchise.id);
-            let fullFranchise = Object.assign({ stats }, franchise);
-            this.franchises.set(franchise.id, fullFranchise);
-        });
+    getAllFranchises () {
+        return this.settings
+            .get('franchises')
+            .franchise
+            .reduce(( franchiseList, franchise ) => {
+                return franchiseList.push(Map(franchise));
+            }, List());
     }
 
     getFranchise ( id ) {
-        return this.franchises.get(id);
+        const array = this.settings.get('franchises').franchise;
+        const count = array.length;
+        let i = 0;
+        let current;
+        for ( ; i < count; ++i ) {
+            current = array[ i ];
+            if ( current.id === id ) {
+                return Map(current);
+            }
+        }
     }
 
     getSettings () {
-        return this.league;
+        return this.settings;
     }
 }
 

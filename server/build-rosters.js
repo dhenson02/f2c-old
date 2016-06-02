@@ -9,23 +9,16 @@ class Rosters {
         let file = fs.readFileSync(filePath, { encoding: "utf8" });
         let rosters = JSON.parse(file).franchise;
 
-        this.rosters = Map();
-        
-        return (
-            new Promise(( resolve, reject ) => {
-                rosters.forEach(roster => {
-                    players.setupScores(roster.player, roster.id)
-                        .then(() => {
-                            let fullRoster = roster.player.map(id => players.getPlayer(id));
-                            this.rosters.set(roster.id, fullRoster);
-                            resolve(this);
-                        });
-                });
-            }).then(rosters => {
-                console.log(this.rosters.get('0001'));
-                return rosters;
-            }).catch(console.error)
-        );
+        this.rosters = rosters.reduce(( rosterMap, roster ) => {
+            const playerList = roster.player.reduce(( playerList, player ) => {
+                return playerList.push(player);
+            }, List());
+            players.setupScores(roster.id, roster.player);
+            return rosterMap.set(
+                roster.id,
+                playerList
+            );
+        }, Map());
     }
 
     getRoster ( id ) {

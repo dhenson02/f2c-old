@@ -1,12 +1,11 @@
 # f2c
 
-### Fantasy Football App for [myfantasyleague.com]()
+### Fantasy Football App for [myfantasyleague.com](http://myfantasyleague.com)
  - [Express JS](http://expressjs.com/) 4.x (eventually 5.x)
  - [React](https://facebook.github.io/react/) >= 15.1.0
- - [Redux](http://redux.js.org/)
- - [React Redux](https://github.com/reactjs/react-redux)
  - [React-Router](https://github.com/reactjs/react-router)
- - [react-router-redux](https://github.com/reactjs/react-router-redux)
+ - [Relay](https://facebook.github.io/relay)
+ - [GraphQL](http://graphql.org/)
  - [Babel](http://babeljs.io/) >= 6
  - [Kube CSS Framework](https://imperavi.com/kube/)
 
@@ -25,15 +24,15 @@ and plenty more (see package.json for details).
 #### Requires a bit of manual labor.  Most of it can be done by running:
 
 ```bash
-sh grab-all.sh
+./grab-all
 ```
 
 However, some of these require different parameters (week and/or player number).  Those that don't have this requirement will be filled correctly.  The others can be obtained with:
 
 ```bash
-sh grab.sh $TYPE $WEEK $PLAYER
+./grab $TYPE $WEEK $PLAYER
     # ... as many times as necessary
-sh extract.sh
+./extract $TYPE # $TYPE is optional here
 ```
 
 `extract.sh` cleans up the JSON that is returned because it does some unnecessary nesting and adds extra data I don't need.
@@ -42,10 +41,8 @@ sh extract.sh
 
 ```bash
 npm install
-cp config.json.blank config.json
-# ^...edit the config.json to match your league's settings
-npm run build
-# ^ or build-dist, watch, or watch-dist
+cp config.json.blank config.json  # ...edit with your settings
+npm run build  # or build-dist, watch, or watch-dist
 npm start
 ```
 
@@ -56,8 +53,6 @@ Players and commissioners of [My Fantasy League](http://www.myfantasyleague.com/
 ## Credits
 
 Please give credit to any of the authors of the attributed packages in the package.json file appropriately.  They all work very hard and deserve some extra traffic :)
-
-Most recent additions/setup of file structure was inspired by [Wes Bos](https://twitter.com/wesbos)'s talk at [learnredux.com](https://learnredux.com)
 
 ## License
 

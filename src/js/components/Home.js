@@ -1,66 +1,57 @@
 'use strict';
 
 import React from 'react';
+import Loader from '../Loader';
 
 class Home extends React.Component {
-    constructor ( props ) {
-        super(props);
+    /*shouldComponentUpdate ( nextProps ) {
+        return nextProps.settings !== this.props.settings;
     }
-
-    shouldComponentUpdate ( nextProps ) {
-        return nextProps.title !== this.props.title;
-    }
-
-    componentWillMount () {
-        if ( this.props.params.title ) {
-            this.setTitle(this.props.params.title);
-        }
-    }
-
-    handleKeyDown ( e ) {
-        e.preventDefault();
-        const key = e.which;
-        if ( key !== 8 ) {
-            this.props.addLetter(key);
-        }
-        else {
-            this.props.backspace();
-        }
-        e.target.value = '';
-    }
-
-    handleKeyUp ( e ) {
-        e.preventDefault();
-        e.target.value = '';
-    }
-
-    setTitle ( title ) {
-        for ( let i = 0; i < title.length; ++i ) {
-            this.props.addLetter(title.charAt(i));
-        }
-    }
-
+     load={id => loadFranchise(teams, id)}
+*/
     render () {
+        const { settings, history } = this.props;
+        if ( !settings || settings.size === 0 ) {
+            return <Loader visible={true}/>;
+        }
+        const teams = settings.get('franchises');
         return (
             <row centered>
                 <column cols="12">
                     <form className="forms">
-                        <label>Title
-                            <span className="desc">Enter a new page title</span>
-                        </label>
-                        <input type="text"
-                               id="title-input"
-                               placeholder="Typing shows below..."
-                               ref="titleInput"
-                               onKeyDown={e => this.handleKeyDown(e)}
-                               onKeyUp={e => this.handleKeyUp(e)}/>
-                        <button type="button"
-                                onMouseDown={() => this.props.backspace()}
-                                onMouseUp={() => this.refs.titleInput.focus()}
-                                round>&#10643;</button>
+                        <section>
+                            <TeamSelector teams={teams}
+                                          push={path => history.push(path)}/>
+                        </section>
                     </form>
                 </column>
             </row>
+        );
+    }
+}
+
+class TeamSelector extends React.Component {
+    shouldComponentUpdate ( nextProps ) {
+        return nextProps.teams !== this.props.teams;
+    }
+
+    handleChange ( e ) {
+        let id = e.target.value;
+        this.props.push(`/${id}`);
+    }
+
+    render () {
+        const teams = this.props.teams;
+        return (
+            <select className="select"
+                    onChange={e => this.handleChange(e)}>
+                {teams.map(( team, i ) => {
+                    return <option key={i}
+                                   value={team.id}>
+                        {team.name}
+                    </option>
+                })}
+            </select>
         );
     }
 }

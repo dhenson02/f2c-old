@@ -3,16 +3,11 @@
 import React from 'react';
 
 class Title extends React.Component {
-    constructor ( props ) {
-        super(props);
-    }
-
     shouldComponentUpdate ( nextProps ) {
         return nextProps.title !== this.props.title;
     }
 
     render () {
-        const title = this.props.title.join('');
         return (
             <row>
                 <column cols="12">
@@ -24,7 +19,7 @@ class Title extends React.Component {
                             width: '100%',
                             display: 'inline'
                         }}>
-                        {`${title}`}
+                        {`${this.props.title}`}
                     </h1>
                 </column>
             </row>

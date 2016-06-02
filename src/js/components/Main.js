@@ -1,34 +1,32 @@
 'use strict';
 
 import React from 'react';
-import { bindActionCreators } from 'redux';
-import { connect } from 'react-redux';
-import * as actions from '../actions/index';
+import Relay from 'react-relay';
+import socket from '../data/socket';
 
 import Title from './Title';
+import Home from './Home';
+import Loader from '../Loader';
 
 class Main extends React.Component {
     constructor ( props ) {
         super(props);
-    }
-
-    shouldComponentUpdate ( nextProps ) {
-        return nextProps.title !== this.props.title;
+        // socket.emit("load league settings");
     }
 
     render () {
+        const { settings, history } = this.props;/*
+        if ( !settings || settings.size === 0 ) {
+            return <Loader visible={true}/>;
+        }*/
         return (
             <div style={{ maxWidth: '960px', margin: '50px auto' }}>
-                {this.props.children ?
-                 React.cloneElement(this.props.children, this.props) :
-                 null}
-                <Title title={this.props.title}/>
+                <Title title={settings.get('name')} />
+                <Home settings={settings} history={history} />
+                {React.cloneElement(this.props.children, this.props)}
             </div>
         );
     }
 }
 
-const mapStateToProps = state => ({ ...state });
-const mapDispatchToProps = dispatch => bindActionCreators(actions, dispatch);
-
-export default connect(mapStateToProps, mapDispatchToProps)(Main);
+export default Main;
